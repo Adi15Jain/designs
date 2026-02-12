@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Programmes Offered | TMU</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <section class="programmes-section" id="programmes">
+            <!-- Background Image Layer -->
+            <div class="bg-image-layer" aria-hidden="true"></div>
+
+            <!-- Animated Mesh Blobs -->
+            <div class="bg-mesh" aria-hidden="true">
+                <div class="bg-blob bg-blob--1"></div>
+                <div class="bg-blob bg-blob--2"></div>
+                <div class="bg-blob bg-blob--3"></div>
+            </div>
+
+            <!-- Particle Layer -->
+            <canvas
+                id="particle-canvas"
+                class="particle-canvas"
+                aria-hidden="true"
+            ></canvas>
+
+            <!-- Glass Shell -->
+            <div class="glass-shell">
+                <header class="section-header">
+                    <p class="section-eyebrow">Explore Academic Excellence</p>
+                    <h1 class="section-title">
+                        Programmes <span class="accent">Offered</span>
+                    </h1>
+                </header>
+
+                <div class="content-layout">
+                    <!-- College Selector Grid -->
+                    <aside class="college-panel">
+                        <div class="panel-heading">
+                            Browse by <span class="accent">College</span>
+                        </div>
+                        <div id="college-grid" class="college-grid"></div>
+                    </aside>
+
+                    <!-- Programme Showcase -->
+                    <div class="programme-showcase">
+                        <div class="showcase-top">
+                            <div class="active-college-info">
+                                <h2
+                                    id="college-name"
+                                    class="active-college-name"
+                                ></h2>
+                                <p
+                                    id="programme-count"
+                                    class="programme-count"
+                                ></p>
+                            </div>
+                            <div
+                                class="card-counter glass-pill"
+                                id="card-counter"
+                            >
+                                <span id="card-current">1</span>
+                                <span class="counter-slash">—</span>
+                                <span id="card-total">0</span>
+                            </div>
+                        </div>
+
+                        <!-- 3-Card Carousel -->
+                        <div class="card-carousel">
+                            <div id="card-track" class="card-track"></div>
+                        </div>
+
+                        <div class="nav-row">
+                            <button
+                                id="prev-btn"
+                                class="nav-btn"
+                                aria-label="Previous"
+                            >
+                                <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="M15 18l-6-6 6-6" />
+                                </svg>
+                            </button>
+                            <div class="progress-track">
+                                <div
+                                    id="progress-fill"
+                                    class="progress-fill"
+                                ></div>
+                            </div>
+                            <button
+                                id="next-btn"
+                                class="nav-btn"
+                                aria-label="Next"
+                            >
+                                <svg
+                                    width="18"
+                                    height="18"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="M9 18l6-6-6-6" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script src="data.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>
