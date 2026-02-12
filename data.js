@@ -54,7 +54,7 @@ const categories = [
             {
                 id: "cs-6",
                 title: "BTech CSE in Cloud Technology and Information Security",
-                image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc51?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
@@ -66,7 +66,7 @@ const categories = [
             {
                 id: "cs-8",
                 title: "BTech CSE in Data Science",
-                image: "https://images.unsplash.com/photo-1551288049-bbda48642a4c?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
@@ -90,7 +90,7 @@ const categories = [
             {
                 id: "cs-12",
                 title: "MSc (Master of Science) in Data Science (In collaboration with Aivancity, France)",
-                image: "https://images.unsplash.com/photo-1504868584819-f8e90526354a?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
@@ -108,7 +108,7 @@ const categories = [
             {
                 id: "den-1",
                 title: "BDS (Bachelor of Dental Surgery)",
-                image: "https://images.unsplash.com/photo-1629909608115-f94f5733f409?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
@@ -126,7 +126,7 @@ const categories = [
             {
                 id: "den-4",
                 title: "MDS in Oral Maxillofacial Pathology & oral Microbiology",
-                image: "https://images.unsplash.com/photo-1581594549595-35e6ed934415?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
@@ -150,19 +150,19 @@ const categories = [
             {
                 id: "den-8",
                 title: "MDS in Periodontology",
-                image: "https://images.unsplash.com/photo-1609141241044-42bc196af02c?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
                 id: "den-9",
                 title: "MDS In Prosthodontics and Crown & Bridge",
-                image: "https://images.unsplash.com/photo-1593022356769-11f092790924?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
                 id: "den-10",
                 title: "MDS in Public Health Dentistry",
-                image: "https://images.unsplash.com/photo-1473439213db2-6c39f606f788?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
         ],
@@ -240,7 +240,7 @@ const categories = [
             {
                 id: "eng-1",
                 title: "BTech (AICTE Approved) In Civil Engineering",
-                image: "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
@@ -276,7 +276,7 @@ const categories = [
             {
                 id: "eng-7",
                 title: "MTech (Master of Technology) in Additive Manufacturing",
-                image: "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
@@ -306,7 +306,7 @@ const categories = [
             {
                 id: "mgm-2",
                 title: "BBA (Honours / Honours with Research) in Data Analytics",
-                image: "https://images.unsplash.com/photo-1551288049-bbda48642a4c?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
@@ -318,7 +318,7 @@ const categories = [
             {
                 id: "mgm-4",
                 title: "BBA (Hons) (Honours / Honours with Research)",
-                image: "https://images.unsplash.com/photo-1507679799987-c7377fb386b0?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
@@ -354,13 +354,13 @@ const categories = [
             {
                 id: "med-1",
                 title: "BSc Medical in Anatomy",
-                image: "https://images.unsplash.com/photo-1579154235602-33d5fbf7cbb3?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
                 id: "med-2",
                 title: "BSc Medical in Biochemistry",
-                image: "https://images.unsplash.com/photo-1532187863486-abf9d3a4461a?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
@@ -378,7 +378,7 @@ const categories = [
             {
                 id: "med-5",
                 title: "MD (Doctor of Medicine) in Anatomy",
-                image: "https://images.unsplash.com/photo-1576091160550-217359f42af1?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=800",
                 level: "Doctorate",
             },
             {
@@ -390,7 +390,7 @@ const categories = [
             {
                 id: "med-7",
                 title: "MD (Doctor of Medicine) in Biochemistry",
-                image: "https://images.unsplash.com/photo-1471864190281-ad5f9f81bc44?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=800",
                 level: "Doctorate",
             },
             {
@@ -408,7 +408,7 @@ const categories = [
             {
                 id: "med-10",
                 title: "MD (Doctor of Medicine) in Forensic Medicine",
-                image: "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&q=80&w=800",
                 level: "Doctorate",
             },
             {
@@ -420,7 +420,7 @@ const categories = [
             {
                 id: "med-12",
                 title: "MD (Doctor of Medicine) in Microbiology",
-                image: "https://images.unsplash.com/photo-1579165466511-70e21ad10415?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=800",
                 level: "Doctorate",
             },
             {
@@ -450,7 +450,7 @@ const categories = [
             {
                 id: "med-17",
                 title: "MD (Doctor of Medicine) in Psychiatry",
-                image: "https://images.unsplash.com/photo-1527137341209-b8bc82268418?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800",
                 level: "Doctorate",
             },
             {
@@ -468,7 +468,7 @@ const categories = [
             {
                 id: "med-20",
                 title: "MS (Master of Science) in ENT/Oto-Rhinlaryngology",
-                image: "https://images.unsplash.com/photo-1581595221477-04f1df96cf34?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&q=80&w=800",
                 level: "Doctorate",
             },
             {
@@ -492,13 +492,13 @@ const categories = [
             {
                 id: "med-24",
                 title: "MS (Master of Science) in Orthopaedics",
-                image: "https://images.unsplash.com/photo-1582719477381-4ee749711714?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=800",
                 level: "Doctorate",
             },
             {
                 id: "med-25",
                 title: "MSc Medical in Anatomy",
-                image: "https://images.unsplash.com/photo-1579154341098-e027f3b72746?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
@@ -510,13 +510,13 @@ const categories = [
             {
                 id: "med-27",
                 title: "MSc Medical in Microbiology",
-                image: "https://images.unsplash.com/photo-1583912267550-d44d7a125800?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
                 id: "med-28",
                 title: "MSc Medical in Pharmacology",
-                image: "https://images.unsplash.com/photo-1471864190281-ad5f9f81bc44?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
@@ -534,7 +534,7 @@ const categories = [
             {
                 id: "nur-1",
                 title: "BSc in Nursing",
-                image: "https://images.unsplash.com/photo-1576091160550-217359f42af1?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
@@ -570,7 +570,7 @@ const categories = [
             {
                 id: "nur-7",
                 title: "MSc in Psychiatry Nursing",
-                image: "https://images.unsplash.com/photo-1527137341209-b8bc82268418?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
         ],
@@ -588,13 +588,13 @@ const categories = [
             {
                 id: "pmd-2",
                 title: "BSc in Forensic Science (Honours / Honours with Research)",
-                image: "https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
                 id: "pmd-3",
                 title: "BSc in Medical Lab Techniques",
-                image: "https://images.unsplash.com/photo-1579154235602-33d5fbf7cbb3?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?auto=format&fit=crop&q=80&w=800",
                 level: "UG",
             },
             {
@@ -606,25 +606,25 @@ const categories = [
             {
                 id: "pmd-5",
                 title: "MSc in Forensic Science",
-                image: "https://images.unsplash.com/photo-1582719478140-5e3681a5758f?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1535378917042-10a22c95931a?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
                 id: "pmd-6",
                 title: "MSc in Medical Laboratory Techniques",
-                image: "https://images.unsplash.com/photo-1583912267550-d44d7a125800?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
                 id: "pmd-7",
                 title: "MSc in Optometry",
-                image: "https://images.unsplash.com/photo-1584017894352-90ad00f295f9?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
                 id: "pmd-8",
                 title: "MSc in Radiological Imaging Techniques",
-                image: "https://images.unsplash.com/photo-1519494083224-21311b51c47b?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1530497610245-94d3c16cda28?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
         ],
@@ -648,7 +648,7 @@ const categories = [
             {
                 id: "phr-3",
                 title: "M Pharm (Master of Pharmacy) in Pharmacology",
-                image: "https://images.unsplash.com/photo-1471864190281-ad5f9f81bc44?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1532094349884-543bc11b234d?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
@@ -660,7 +660,7 @@ const categories = [
             {
                 id: "phr-5",
                 title: "Pharm D PB (Post Baccalaureate)",
-                image: "https://images.unsplash.com/photo-1587854692152-cbe660dbbb88?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1585435557343-3b092031a831?auto=format&fit=crop&q=80&w=800",
                 level: "Doctorate",
             },
         ],
@@ -684,7 +684,7 @@ const categories = [
             {
                 id: "ped-3",
                 title: "MPEd",
-                image: "https://images.unsplash.com/photo-1517438476312-10d79c67750d?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
         ],
@@ -720,7 +720,7 @@ const categories = [
             {
                 id: "pt-5",
                 title: "Master of Physiotherapy (MPT) in Orthopaedics",
-                image: "https://images.unsplash.com/photo-1582719477381-4ee749711714?auto=format&fit=crop&q=80&w=800",
+                image: "https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&q=80&w=800",
                 level: "PG",
             },
             {
@@ -745,20 +745,20 @@ const categoryImages = {
         "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&q=80&w=400",
     "computer-science":
         "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=400",
-    dental: "https://images.unsplash.com/photo-1629909608115-f94f5733f409?auto=format&fit=crop&q=80&w=400",
+    dental: "https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&q=80&w=400",
     education:
         "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=400",
     "fine-arts":
         "https://images.unsplash.com/photo-1513364776144-60967b0f800f?auto=format&fit=crop&q=80&w=400",
     law: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&q=80&w=400",
     engineering:
-        "https://images.unsplash.com/photo-1541888946425-d81bb19480c5?auto=format&fit=crop&q=80&w=400",
+        "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=400",
     management:
         "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=400",
     medical:
         "https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?auto=format&fit=crop&q=80&w=400",
     nursing:
-        "https://images.unsplash.com/photo-1576091160550-217359f42af1?auto=format&fit=crop&q=80&w=400",
+        "https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&q=80&w=400",
     paramedical:
         "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=400",
     pharmacy:
