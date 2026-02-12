@@ -199,23 +199,22 @@ function renderCards() {
         var card = document.createElement("article");
         card.className = "programme-card";
 
+        // Full-image background card
         card.innerHTML =
-            '<div class="level-badge">' +
-            (prog.level || "UG") +
-            "</div>" +
-            '<div class="card-image-wrap">' +
-            '<img src="' +
+            '<div class="card-bg" style="background-image:url(' +
             prog.image +
-            '" alt="' +
-            prog.title +
-            '" class="card-image" loading="lazy" ' +
-            "onerror=\"this.style.display='none'\">" +
-            "</div>" +
-            '<div class="card-body">' +
+            ')"></div>' +
+            '<div class="card-overlay"></div>' +
+            '<div class="card-content">' +
+            '<span class="level-badge">' +
+            (prog.level || "UG") +
+            "</span>" +
+            '<div class="card-bottom">' +
             '<h3 class="card-title">' +
             prog.title +
             "</h3>" +
             '<button class="explore-btn">Explore Programme</button>' +
+            "</div>" +
             "</div>";
 
         cardTrack.appendChild(card);
