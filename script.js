@@ -40,7 +40,7 @@ function init() {
     prevBtn.addEventListener("click", prevCard);
     nextBtn.addEventListener("click", nextCard);
 
-    // Level filter pills — smooth animated switch
+    // Level filter pills — JS opacity crossfade (no CSS animation conflict)
     var levelFilter = document.getElementById("level-filter");
     if (levelFilter) {
         levelFilter.addEventListener("click", function (e) {
@@ -49,20 +49,30 @@ function init() {
             var level = pill.getAttribute("data-level");
             if (level === activeFilter) return;
 
-            // Update pill UI
+            // Update pill UI immediately
             levelFilter.querySelectorAll(".filter-pill").forEach(function (p) {
                 p.classList.toggle("active", p === pill);
             });
 
-            // Animate out, swap content, animate in
-            cardTrack.classList.add("filtering");
+            // Fade out → swap content → fade back in
+            cardTrack.style.transition = "opacity 0.18s ease";
+            cardTrack.style.opacity = "0";
+
             setTimeout(function () {
                 activeFilter = level;
                 currentIndex = 0;
                 renderCards();
                 updateCarousel();
-                cardTrack.classList.remove("filtering");
-            }, 190); // halfway through the filterFade animation
+
+                requestAnimationFrame(function () {
+                    cardTrack.style.transition = "opacity 0.28s ease";
+                    cardTrack.style.opacity = "1";
+                    setTimeout(function () {
+                        cardTrack.style.transition = ""; // restore transform transition
+                        cardTrack.style.opacity = "";
+                    }, 300);
+                });
+            }, 180);
         });
     }
 
@@ -235,13 +245,21 @@ function renderCards() {
         return;
     }
 
-    // Each card gets a staggered entrance delay
+    // Each card gets staggered .card-in entrance (class-based, not baked into base CSS)
     var cardIndex = 0;
     filtered.forEach(function (prog) {
         var card = document.createElement("article");
         card.className = "programme-card";
-        card.style.animationDelay = (cardIndex * 0.07) + "s";
+        var delay = cardIndex * 65; // ms stagger
+        card.style.animationDelay = (cardIndex * 0.065) + "s";
+        card.classList.add("card-in");
         cardIndex++;
+
+        // Remove .card-in after animation so hover transform is never blocked
+        var removeDelay = 500 + delay;
+        setTimeout(function (c) {
+            return function () { c.classList.remove("card-in"); };
+        }(card), removeDelay);
 
         // Full-image background card
         card.innerHTML =
