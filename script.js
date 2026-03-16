@@ -40,7 +40,7 @@ function init() {
     prevBtn.addEventListener("click", prevCard);
     nextBtn.addEventListener("click", nextCard);
 
-    // Level filter pills
+    // Level filter pills — smooth animated switch
     var levelFilter = document.getElementById("level-filter");
     if (levelFilter) {
         levelFilter.addEventListener("click", function (e) {
@@ -48,14 +48,21 @@ function init() {
             if (!pill || isTransitioning) return;
             var level = pill.getAttribute("data-level");
             if (level === activeFilter) return;
-            activeFilter = level;
+
             // Update pill UI
             levelFilter.querySelectorAll(".filter-pill").forEach(function (p) {
                 p.classList.toggle("active", p === pill);
             });
-            currentIndex = 0;
-            renderCards();
-            updateCarousel();
+
+            // Animate out, swap content, animate in
+            cardTrack.classList.add("filtering");
+            setTimeout(function () {
+                activeFilter = level;
+                currentIndex = 0;
+                renderCards();
+                updateCarousel();
+                cardTrack.classList.remove("filtering");
+            }, 190); // halfway through the filterFade animation
         });
     }
 
@@ -228,9 +235,13 @@ function renderCards() {
         return;
     }
 
+    // Each card gets a staggered entrance delay
+    var cardIndex = 0;
     filtered.forEach(function (prog) {
         var card = document.createElement("article");
         card.className = "programme-card";
+        card.style.animationDelay = (cardIndex * 0.07) + "s";
+        cardIndex++;
 
         // Full-image background card
         card.innerHTML =
@@ -253,8 +264,39 @@ function renderCards() {
         cardTrack.appendChild(card);
     });
 
+    // Show/hide filter pills based on what programmes exist in this college
+    updateAvailablePills();
+
     // Mobile: render dots after cards are in DOM
     if (isMobile()) renderMobileDots();
+}
+
+// Shows only pills that have at least one matching programme in the current college
+function updateAvailablePills() {
+    var levelFilter = document.getElementById("level-filter");
+    if (!levelFilter) return;
+
+    // Collect which levels exist in the current college
+    var available = {};
+    currentPrograms.forEach(function (p) { available[p.level] = true; });
+
+    var needReset = false;
+    levelFilter.querySelectorAll(".filter-pill").forEach(function (pill) {
+        var level = pill.getAttribute("data-level");
+        if (level === "All") return; // always visible
+        var show = !!available[level];
+        pill.style.display = show ? "" : "none";
+        // If the currently active filter is now hidden, we'll need to reset
+        if (!show && level === activeFilter) needReset = true;
+    });
+
+    // Reset to All if active filter has no programmes here
+    if (needReset) {
+        activeFilter = "All";
+        levelFilter.querySelectorAll(".filter-pill").forEach(function (p) {
+            p.classList.toggle("active", p.getAttribute("data-level") === "All");
+        });
+    }
 }
 
 // ─── Carousel Sliding ───
@@ -440,10 +482,16 @@ function initDragScroll() {
 
         // Snap by how many card-widths were dragged (threshold: 25% of card)
         var steps = -Math.round(delta / (cardW * 0.25));
-        // Clamp to 1 card per gesture for natural feel
         steps = Math.max(-1, Math.min(1, steps));
         currentIndex = Math.max(0, Math.min(currentIndex + steps, maxIdx));
-        updateCarousel();
+
+        // Double-RAF: ensures CSS transition is applied before the transform change
+        requestAnimationFrame(function () {
+            cardTrack.style.transition = "";
+            requestAnimationFrame(function () {
+                updateCarousel();
+            });
+        });
     });
 }
 

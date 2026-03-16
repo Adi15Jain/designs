@@ -501,8 +501,8 @@
 /* ─── Programme Card (Full Image Background) ─── */
 .programme-card {
     flex: 0 0 calc((100% - var(--card-gap) * 2) / 3);
-    /* height: 100% so cards fill the flex container and match college grid height */
     height: 100%;
+    max-height: 480px;            /* cap on very tall screens */
     border-radius: 20px;
     overflow: hidden;
     position: relative;
@@ -510,10 +510,13 @@
     flex-direction: column;
     transition:
         transform 0.4s var(--ease-out),
-        box-shadow 0.4s var(--ease-out);
+        box-shadow 0.4s var(--ease-out),
+        opacity 0.3s ease;
     cursor: default;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 16px 48px rgba(0, 20, 50, 0.12);
+    /* staggered entrance: delay set per-card via JS */
+    animation: cardEntrance 0.5s var(--ease-out) both;
 }
 
 .programme-card:hover {
@@ -681,46 +684,42 @@
     width: 0%;
 }
 
-/* ─── Keyframes ─── */
 @keyframes fadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes collegeCardEntrance {
-    from {
-        opacity: 0;
-        transform: translateY(12px) scale(0.96);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(12px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes trackExit {
-    to {
-        opacity: 0;
-        transform: translateX(-30px) scale(0.97);
-    }
+    to { opacity: 0; transform: translateX(-30px) scale(0.97); }
 }
 
 @keyframes trackEnter {
-    from {
-        opacity: 0;
-        transform: translateX(30px) scale(0.97);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0) scale(1);
-    }
+    from { opacity: 0; transform: translateX(30px) scale(0.97); }
+    to   { opacity: 1; transform: translateX(0) scale(1); }
 }
+
+@keyframes cardEntrance {
+    from { opacity: 0; transform: translateY(18px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0)   scale(1);    }
+}
+
+@keyframes filterFade {
+    0%   { opacity: 1; }
+    35%  { opacity: 0; transform: translateY(8px); }
+    65%  { opacity: 0; transform: translateY(-6px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Used during filter pill switch */
+.card-track.filtering {
+    animation: filterFade 0.38s var(--ease-out) both;
+}
+
 
 /* ─── Mobile-only elements — hidden on desktop ─── */
 .mobile-college-dropdown { display: none; position: relative; }

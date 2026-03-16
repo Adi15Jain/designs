@@ -42,20 +42,46 @@
 
                 <!-- Mobile: Bottom-sheet college picker (hidden on desktop) -->
                 <div class="mobile-college-dropdown" id="mobile-dropdown">
-                    <button class="mcd-trigger" id="mcd-trigger" aria-expanded="false" aria-haspopup="listbox">
+                    <button
+                        class="mcd-trigger"
+                        id="mcd-trigger"
+                        aria-expanded="false"
+                        aria-haspopup="listbox"
+                    >
                         <div class="mcd-trigger-left">
                             <span class="mcd-icon">🏛️</span>
                             <div class="mcd-trigger-text">
-                                <span class="mcd-sublabel">Browse by College</span>
-                                <span class="mcd-label" id="mcd-label">Select College</span>
+                                <span class="mcd-sublabel"
+                                    >Browse by College</span
+                                >
+                                <span class="mcd-label" id="mcd-label"
+                                    >Select College</span
+                                >
                             </div>
                         </div>
-                        <svg class="mcd-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                        <svg
+                            class="mcd-chevron"
+                            width="18"
+                            height="18"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
                     </button>
                     <!-- Backdrop -->
                     <div class="mcd-backdrop" id="mcd-backdrop"></div>
                     <!-- Bottom Sheet Panel -->
-                    <div class="mcd-panel" id="mcd-panel" role="listbox" aria-label="Select College">
+                    <div
+                        class="mcd-panel"
+                        id="mcd-panel"
+                        role="listbox"
+                        aria-label="Select College"
+                    >
                         <div class="mcd-panel-handle"></div>
                         <p class="mcd-panel-title">Browse by College</p>
                         <div class="mcd-list" id="mcd-list"></div>
@@ -99,13 +125,21 @@
                                     <button
                                         class="filter-pill active"
                                         data-level="All"
-                                    >All</button>
-                                    <button class="filter-pill" data-level="UG">UG</button>
-                                    <button class="filter-pill" data-level="PG">PG</button>
+                                    >
+                                        All
+                                    </button>
+                                    <button class="filter-pill" data-level="UG">
+                                        UG
+                                    </button>
+                                    <button class="filter-pill" data-level="PG">
+                                        PG
+                                    </button>
                                     <button
                                         class="filter-pill"
                                         data-level="Doctorate"
-                                    >Doctorate</button>
+                                    >
+                                        Doctorate
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +150,12 @@
                         </div>
 
                         <!-- Mobile: Dot Pagination (hidden on desktop) -->
-                        <div class="mobile-dot-nav" id="mobile-dot-nav" role="tablist" aria-label="Programme cards"></div>
+                        <div
+                            class="mobile-dot-nav"
+                            id="mobile-dot-nav"
+                            role="tablist"
+                            aria-label="Programme cards"
+                        ></div>
 
                         <div class="nav-row">
                             <button
