@@ -1,6 +1,6 @@
 /* ==========================================================================
-   TMU Programmes Section — Premium Overhaul v2
-   3-Card Carousel · Background Image · Liquid Glass
+   TMU Programmes Section — Premium Overhaul v3
+   3-Card Carousel · TMU Gradient · Level Filter · Liquid Glass
    Pure CSS — Zero Dependencies
    ========================================================================== */
 
@@ -38,6 +38,7 @@
     height: 90vh;
     max-height: 90vh;
     overflow: hidden;
+    overflow-x: hidden; /* belt-and-suspenders: prevents horizontal page bleed */
     font-family:
         "Inter",
         -apple-system,
@@ -47,20 +48,11 @@
     -webkit-font-smoothing: antialiased;
 }
 
-/* ─── Background Image Layer ─── */
+/* ─── Background Gradient Layer (TMU Palette — no photo) ─── */
 .bg-image-layer {
     position: absolute;
     inset: 0;
     z-index: 0;
-    background:
-        linear-gradient(
-            135deg,
-            rgba(185, 192, 205, 0.9) 0%,
-            rgba(165, 175, 195, 0.82) 45%,
-            rgba(185, 192, 205, 0.92) 100%
-        ),
-        url("https://www.tmu.ac.in/uploads/events/past_event/default_banner_news.jpg")
-            center / cover no-repeat;
 }
 
 /* ─── Animated Mesh Blobs ─── */
@@ -77,7 +69,7 @@
     border-radius: 50%;
     filter: blur(100px);
     will-change: transform;
-    opacity: 0.45;
+    opacity: 0.6;
 }
 
 .bg-blob--1 {
@@ -85,7 +77,7 @@
     height: 50vw;
     background: radial-gradient(
         circle,
-        rgba(0, 33, 71, 0.14) 0%,
+        rgba(0, 33, 71, 0.22) 0%,
         transparent 70%
     );
     top: -20%;
@@ -97,7 +89,7 @@
     height: 40vw;
     background: radial-gradient(
         circle,
-        rgba(255, 87, 34, 0.1) 0%,
+        rgba(255, 87, 34, 0.14) 0%,
         transparent 70%
     );
     bottom: -15%;
@@ -109,7 +101,7 @@
     height: 35vw;
     background: radial-gradient(
         circle,
-        rgba(100, 150, 220, 0.12) 0%,
+        rgba(100, 150, 220, 0.18) 0%,
         transparent 70%
     );
     top: 35%;
@@ -148,7 +140,7 @@
     inset: 0;
     z-index: 2;
     pointer-events: none;
-    opacity: 0.35;
+    opacity: 0.5;
 }
 
 /* ─── Glass Shell ─── */
@@ -245,126 +237,110 @@
 .college-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    grid-auto-rows: 62px; /* strict compact height per card */
+    gap: 10px;
     flex: 1;
     min-height: 0;
     overflow: hidden;
+    align-content: start; /* cards stack from top, don't stretch to fill */
 }
 
+/* ─── College Card — Dark minimal (no photo) ─── */
 .college-card {
     position: relative;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
     cursor: pointer;
     display: flex;
-    align-items: flex-end;
-    padding: 14px 16px;
-    transition: all 0.5s var(--ease-out);
-    border: 1.5px solid rgba(255, 255, 255, 0.15);
+    align-items: center;
+    justify-content: center;
+    padding: 0 16px;
+    height: 56px; /* explicit height matches grid-auto-rows */
+    transition: all 0.3s var(--ease-out);
+    border: 1.5px solid rgba(255, 255, 255, 0.07);
+    background: #002147;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
-.college-card-bg {
+/* Orange left accent bar */
+.college-card::before {
+    content: "";
     position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
-    transition: all 0.6s var(--ease-out);
+    left: 0;
+    top: 20%;
+    height: 60%;
+    width: 3px;
+    background: var(--orange);
+    border-radius: 0 3px 3px 0;
+    z-index: 2;
+    transition:
+        transform 0.3s var(--ease-out),
+        opacity 0.3s ease;
+    transform: scaleY(0);
+    opacity: 0;
+}
+.college-card:hover::before,
+.college-card.active::before {
+    transform: scaleY(1);
+    opacity: 1;
 }
 
+/* Hover highlight wash */
 .college-card::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-        to top,
-        rgba(0, 12, 35, 0.82) 0%,
-        rgba(0, 12, 35, 0.45) 55%,
-        rgba(0, 12, 35, 0.3) 100%
-    );
-    transition: all 0.4s var(--ease-out);
+    background: rgba(255, 255, 255, 0.04);
+    opacity: 0;
     z-index: 1;
-}
-
-/* Glass shine sweep */
-.college-card::before {
-    content: "";
-    position: absolute;
-    top: -100%;
-    left: -100%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        135deg,
-        transparent 42%,
-        rgba(255, 255, 255, 0.07) 50%,
-        transparent 58%
-    );
-    transition: all 0.6s ease;
-    z-index: 3;
+    transition: opacity 0.3s ease;
     pointer-events: none;
 }
-.college-card:hover::before {
-    top: 0;
-    left: 0;
+.college-card:hover::after {
+    opacity: 1;
+}
+
+/* bg element kept for JS parallax hook — no image */
+.college-card-bg {
+    display: none; /* not needed without photo */
 }
 
 .college-card-info {
     position: relative;
     z-index: 2;
     width: 100%;
+    text-align: center;
 }
 
 .college-card-name {
-    color: #fff;
-    font-size: 0.92rem;
-    font-weight: 700;
-    line-height: 1.15;
-    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    font-size: 0.88rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .college-card-count {
-    color: rgba(255, 255, 255, 0.55);
-    font-size: 0.65rem;
-    font-weight: 600;
-    margin-top: 2px;
-    letter-spacing: 0.02em;
+    display: none;
 }
 
 .college-card:hover {
-    transform: translateY(-2px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
-}
-.college-card:hover .college-card-bg {
-    transform: scale(1.1);
-}
-.college-card:hover::after {
-    background: linear-gradient(
-        to top,
-        rgba(0, 12, 35, 0.7) 0%,
-        rgba(0, 12, 35, 0.3) 55%,
-        rgba(0, 12, 35, 0.15) 100%
-    );
+    background: var(--navy-70);
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
 }
 
 .college-card.active {
+    background: #002147;
     border-color: var(--orange);
     box-shadow:
         0 0 0 1px var(--orange),
-        0 4px 18px var(--orange-glow),
-        0 8px 24px rgba(0, 0, 0, 0.1);
-    transform: scale(1.03);
-}
-.college-card.active::after {
-    background: linear-gradient(
-        to top,
-        rgba(0, 12, 35, 0.65) 0%,
-        rgba(0, 12, 35, 0.25) 55%,
-        rgba(0, 12, 35, 0.1) 100%
-    );
-}
-.college-card.active .college-card-bg {
-    transform: scale(1.06);
+        0 4px 18px var(--orange-glow);
+    transform: scale(1.02);
 }
 
 /* ─── Programme Showcase ─── */
@@ -376,23 +352,43 @@
     min-width: 0;
 }
 
+/* ─── Showcase Header — Two isolated rows ─── */
 .showcase-top {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 1.2rem;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 1rem;
     flex-shrink: 0;
 }
 
+/* Each row: full-width flex, space-between, aligned center */
+.showcase-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 0;
+}
+
+/* Row 2 sits slightly shorter — programme count + filter */
+.showcase-row--sub {
+    align-items: center;
+}
+
 .active-college-name {
-    font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+    font-size: clamp(2rem, 2.5vw, 1.8rem);
     font-weight: 700;
     color: var(--navy);
-    letter-spacing: -0.02em;
+    /* flex-shrink: 0 keeps the name from ever wrapping awkwardly */
+    flex-shrink: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70%;
 }
 
 .programme-count {
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     color: var(--text);
     font-weight: 500;
     margin-top: 2px;
@@ -421,18 +417,75 @@
     font-weight: 400;
 }
 
+/* ─── Level Filter Pills ─── */
+.level-filter {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.filter-pill {
+    padding: 5px 14px;
+    border-radius: 100px;
+    border: 1.5px solid rgba(0, 33, 71, 0.18);
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--navy);
+    cursor: pointer;
+    transition: all 0.25s var(--ease-out);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    white-space: nowrap;
+}
+
+.filter-pill:hover {
+    background: rgba(0, 33, 71, 0.08);
+    border-color: rgba(0, 33, 71, 0.3);
+    transform: translateY(-1px);
+}
+
+.filter-pill.active {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: #fff;
+    box-shadow: 0 4px 14px var(--orange-glow);
+    transform: translateY(-1px);
+}
+
+/* Empty state when filter has no programmes */
+.no-results-msg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 180px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+    opacity: 0.7;
+}
+
 /* ─── Card Carousel — 3 cards visible ─── */
 .card-carousel {
     flex: 1;
     overflow: hidden;
     position: relative;
     min-height: 0;
+    overscroll-behavior: contain; /* prevent scroll leaking to page */
 }
 
 .card-track {
     display: flex;
     gap: var(--card-gap);
-    transition: transform 0.6s var(--ease-out);
+    /* CSS transition drives the slide — clean, reliable, no JS animation conflict */
+    transition: transform 0.52s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     height: 100%;
     will-change: transform;
 }
@@ -448,6 +501,8 @@
 /* ─── Programme Card (Full Image Background) ─── */
 .programme-card {
     flex: 0 0 calc((100% - var(--card-gap) * 2) / 3);
+    /* height: 100% so cards fill the flex container and match college grid height */
+    height: 100%;
     border-radius: 20px;
     overflow: hidden;
     position: relative;
@@ -506,7 +561,7 @@
 .card-content {
     position: relative;
     z-index: 2;
-    padding: 24px 26px;
+    padding: 16px 18px; /* reduced from 24px 26px for more image */
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -519,33 +574,33 @@
 .level-badge {
     display: inline-block;
     align-self: flex-start;
-    padding: 4px 10px;
+    padding: 3px 8px;
     background: rgba(255, 255, 255, 0.18);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 8px;
-    font-size: 1rem;
+    border-radius: 6px;
+    font-size: 0.62rem; /* reduced from 1rem */
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     color: #fff;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .card-title {
-    font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+    font-size: clamp(0.82rem, 1.1vw, 1rem); /* reduced from 1.05–1.3rem */
     font-weight: 700;
     color: #fff;
     line-height: 1.3;
     letter-spacing: -0.01em;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
     text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .explore-btn {
     align-self: flex-start;
-    padding: 9px 22px;
+    padding: 7px 16px; /* tighter than before */
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
@@ -553,7 +608,7 @@
     border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 40px;
     font-family: inherit;
-    font-size: 0.8rem;
+    font-size: 0.7rem; /* reduced from 0.8rem */
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s var(--ease-out);
@@ -582,42 +637,37 @@
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: var(--glass-bg);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid var(--glass-border);
+    background: var(--navy);
+    border: 1.5px solid rgba(0, 33, 71, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s var(--ease-out);
-    color: var(--navy);
-    box-shadow:
-        var(--shadow-sm),
-        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    transition: all 0.25s var(--ease-out);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 33, 71, 0.28);
     flex-shrink: 0;
 }
 
 .nav-btn:hover {
-    background: var(--navy);
-    color: #fff;
-    transform: scale(1.08);
-    box-shadow: 0 6px 20px var(--navy-20);
-    border-color: var(--navy);
+    background: var(--orange);
+    border-color: var(--orange);
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px var(--orange-glow);
 }
 .nav-btn:active {
     transform: scale(0.92);
 }
 .nav-btn.disabled {
-    opacity: 0.25;
+    opacity: 0.3;
     cursor: default;
     pointer-events: none;
 }
 
 .progress-track {
-    width: 100px;
-    height: 3px;
-    background: rgba(0, 33, 71, 0.06);
+    width: 140px;
+    height: 4px;
+    background: rgba(0, 33, 71, 0.18);
     border-radius: 4px;
     overflow: hidden;
     flex-shrink: 0;
@@ -672,97 +722,264 @@
     }
 }
 
+/* ─── Mobile-only elements — hidden on desktop ─── */
+.mobile-college-dropdown { display: none; position: relative; }
+.mobile-dot-nav          { display: none; }
+
+/* ─── Mobile College Dropdown (MCD) ─── */
+.mcd-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--navy);
+    color: #fff;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-out);
+    gap: 12px;
+    text-align: left;
+}
+.mcd-trigger:active { opacity: 0.85; }
+.mcd-trigger[aria-expanded="true"] {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 1px var(--orange), 0 4px 14px var(--orange-glow);
+}
+.mcd-trigger-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.mcd-icon { font-size: 1.15rem; flex-shrink: 0; }
+.mcd-trigger-text { display: flex; flex-direction: column; min-width: 0; }
+.mcd-sublabel {
+    font-size: 0.58rem;
+    font-weight: 600;
+    opacity: 0.55;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+.mcd-label {
+    font-size: 0.92rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.mcd-chevron {
+    flex-shrink: 0;
+    transition: transform 0.35s var(--ease-out);
+}
+.mcd-trigger[aria-expanded="true"] .mcd-chevron { transform: rotate(180deg); }
+
+/* Backdrop */
+.mcd-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 49;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.mcd-backdrop.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Bottom-sheet panel */
+.mcd-panel {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #ffffff;
+    border-radius: 24px 24px 0 0;
+    padding: 8px 0 env(safe-area-inset-bottom, 20px);
+    z-index: 50;
+    max-height: 72vh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transform: translateY(105%);
+    transition: transform 0.42s var(--ease-out);
+    box-shadow: 0 -6px 40px rgba(0, 0, 0, 0.18);
+    -webkit-overflow-scrolling: touch;
+}
+.mcd-panel.open { transform: translateY(0); }
+.mcd-panel-handle {
+    width: 40px;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin: 0 auto 14px;
+}
+.mcd-panel-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    padding: 0 20px 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    margin-bottom: 4px;
+}
+.mcd-list { padding: 0 8px 8px; }
+.mcd-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.18s ease;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--text);
+}
+.mcd-item:active { background: rgba(0, 33, 71, 0.07); }
+.mcd-item.active {
+    background: rgba(0, 33, 71, 0.05);
+    color: var(--navy);
+}
+.mcd-item.active::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background: var(--orange);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Mobile Dot Nav */
+.mobile-dot-nav {
+    justify-content: center;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 0 2px;
+    flex-shrink: 0;
+}
+.mobile-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(0, 33, 71, 0.2);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.3s var(--ease-spring);
+    flex-shrink: 0;
+}
+.mobile-dot.active {
+    width: 22px;
+    border-radius: 4px;
+    background: var(--orange);
+}
+
+/* ─── Desktop carousel drag cursor ─── */
+.card-carousel { cursor: grab; }
+.card-carousel.dragging { cursor: grabbing; }
+
 /* ─── Responsive: Tablets ─── */
 @media (max-width: 1100px) {
-    .college-panel {
-        width: 260px;
-    }
-    .college-card-name {
-        font-size: 0.75rem;
-    }
-    .programme-card {
-        flex: 0 0 calc((100% - var(--card-gap)) / 2);
-    }
+    .college-panel { width: 260px; }
+    .college-card-name { font-size: 0.75rem; }
+    .programme-card { flex: 0 0 calc((100% - var(--card-gap)) / 2); height: 100%; }
+    .filter-pill { font-size: 0.67rem; padding: 4px 11px; }
 }
 
-@media (max-width: 992px) {
+/* ─── Mobile View (≤ 768px) — completely separate layout ─── */
+@media (max-width: 768px) {
+    /* Full viewport height */
     .programmes-section {
-        height: auto;
-        min-height: 100vh;
+        height: 100dvh;
+        max-height: 100dvh;
     }
+
     .glass-shell {
-        padding: 1.2rem;
-    }
-    .content-layout {
-        flex-direction: column;
-        gap: 1rem;
+        padding: 1.2rem 1.2rem 0.8rem;
+        gap: 0;
     }
 
-    .college-panel {
-        width: 100%;
-        margin: 0 -1.2rem;
-        padding: 1rem 1.5rem;
-        width: calc(100% + 2.4rem);
-        background: rgba(240, 242, 245, 0.85);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-    }
-    .panel-heading {
-        display: none;
-    }
+    .section-header { margin-bottom: 0.8rem; }
+    .section-title  { font-size: clamp(1.7rem, 6vw, 2.1rem); }
+    .section-eyebrow { margin-bottom: 0.3rem; }
 
-    .college-grid {
-        display: flex;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        gap: 8px;
-    }
-    .college-grid::-webkit-scrollbar {
-        display: none;
-    }
-    .college-card {
-        min-width: 120px;
-        min-height: 48px;
+    /* Show mobile-only elements */
+    .mobile-college-dropdown {
+        display: block;
+        margin-bottom: 0.9rem;
         flex-shrink: 0;
     }
+    .mobile-dot-nav { display: flex; }
 
-    .card-carousel {
-        min-height: 360px;
+    /* Hide desktop-only elements */
+    .college-panel { display: none; }
+    .nav-row        { display: none; }
+    #card-counter   { display: none; }
+
+    /* Full-width layout */
+    .content-layout {
+        flex-direction: column;
+        gap: 0;
+        flex: 1;
+        min-height: 0;
     }
+    .programme-showcase {
+        flex: 1;
+        min-height: 0;
+    }
+
+    /* Compact header rows */
+    .showcase-top   { margin-bottom: 0.6rem; }
+    .showcase-row   { gap: 6px; }
+    .active-college-name { font-size: 1.15rem; }
+    .programme-count     { font-size: 0.75rem; }
+    .filter-pill    { font-size: 0.63rem; padding: 4px 10px; }
+    .level-filter   { gap: 5px; }
+
+    /* Card carousel: overflow visible so next card peeks */
+    .card-carousel {
+        overflow: visible;
+        cursor: default;
+    }
+
+    /* Card track: native scroll-snap — best performance on mobile */
+    .card-track {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        transition: none !important;
+        padding-right: 1.2rem;
+    }
+    .card-track::-webkit-scrollbar { display: none; }
+
+    /* Cards: nearly full width with right-side peek */
     .programme-card {
-        flex: 0 0 calc((100% - var(--card-gap)) / 2);
+        flex: 0 0 86%;
+        height: 100%;
+        min-height: 0;
+        scroll-snap-align: start;
     }
 }
 
-@media (max-width: 600px) {
-    .programme-card {
-        flex: 0 0 100%;
-    }
-    .card-title {
-        font-size: 1rem;
-    }
-    .nav-btn {
-        width: 40px;
-        height: 40px;
-    }
-    .progress-track {
-        width: 70px;
-    }
+/* ─── Small Mobile (≤ 480px) ─── */
+@media (max-width: 480px) {
+    .glass-shell { padding: 1rem 1rem 0.6rem; }
+    .section-title { font-size: 1.6rem; }
+    .programme-card { flex: 0 0 92%; }
+    .filter-pill { font-size: 0.6rem; padding: 3px 8px; }
 }
 
 /* ─── Accessibility ─── */
 @media (prefers-reduced-motion: reduce) {
-    *,
-    *::before,
-    *::after {
+    *, *::before, *::after {
         animation-duration: 0.01ms !important;
         transition-duration: 0.01ms !important;
     }
-    .bg-blob {
-        animation: none !important;
-    }
-    .particle-canvas {
-        display: none;
-    }
+    .bg-blob { animation: none !important; }
+    .particle-canvas { display: none; }
 }

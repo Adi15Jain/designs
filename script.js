@@ -19,8 +19,18 @@ var nextBtn = document.getElementById("next-btn");
 var activeCategoryId = categories[0].id;
 var currentIndex = 0;
 var currentPrograms = [];
+var activeFilter = "All"; // level filter: All | UG | PG | Doctorate
 var isTransitioning = false;
 var wheelCooldown = false;
+
+// ─── Helpers ───
+function isMobile() { return window.innerWidth <= 768; }
+
+function getFilteredPrograms() {
+    return activeFilter === "All"
+        ? currentPrograms
+        : currentPrograms.filter(function (p) { return p.level === activeFilter; });
+}
 
 // ─── Init ───
 function init() {
@@ -30,51 +40,31 @@ function init() {
     prevBtn.addEventListener("click", prevCard);
     nextBtn.addEventListener("click", nextCard);
 
-    document.addEventListener("keydown", function (e) {
-        if (e.key === "ArrowRight" || e.key === "ArrowDown") nextCard();
-        if (e.key === "ArrowLeft" || e.key === "ArrowUp") prevCard();
-    });
-
-    // Wheel — debounced
-    var carousel = document.querySelector(".card-carousel");
-    if (carousel) {
-        carousel.addEventListener(
-            "wheel",
-            function (e) {
-                if (wheelCooldown || Math.abs(e.deltaY) < 15) return;
-                e.preventDefault();
-                wheelCooldown = true;
-                if (e.deltaY > 0) nextCard();
-                else prevCard();
-                setTimeout(function () {
-                    wheelCooldown = false;
-                }, 450);
-            },
-            { passive: false },
-        );
+    // Level filter pills
+    var levelFilter = document.getElementById("level-filter");
+    if (levelFilter) {
+        levelFilter.addEventListener("click", function (e) {
+            var pill = e.target.closest(".filter-pill");
+            if (!pill || isTransitioning) return;
+            var level = pill.getAttribute("data-level");
+            if (level === activeFilter) return;
+            activeFilter = level;
+            // Update pill UI
+            levelFilter.querySelectorAll(".filter-pill").forEach(function (p) {
+                p.classList.toggle("active", p === pill);
+            });
+            currentIndex = 0;
+            renderCards();
+            updateCarousel();
+        });
     }
 
-    // Touch swipe
-    var touchX = 0;
-    if (carousel) {
-        carousel.addEventListener(
-            "touchstart",
-            function (e) {
-                touchX = e.touches[0].clientX;
-            },
-            { passive: true },
-        );
-        carousel.addEventListener(
-            "touchend",
-            function (e) {
-                var diff = touchX - e.changedTouches[0].clientX;
-                if (Math.abs(diff) > 50) {
-                    diff > 0 ? nextCard() : prevCard();
-                }
-            },
-            { passive: true },
-        );
-    }
+    // Desktop: drag-to-scroll (replaces wheel handler)
+    initDragScroll();
+
+    // Mobile: dropdown + dot nav
+    initMobileDropdown();
+
 
     initParticles();
 
@@ -98,7 +88,8 @@ function renderCollegeGrid() {
 
         var bg = document.createElement("div");
         bg.className = "college-card-bg";
-        bg.style.backgroundImage = "url(" + cat.image + ")";
+        // No background image — card uses CSS gradient instead
+        // bg.style.backgroundImage kept blank intentionally
 
         var info = document.createElement("div");
         info.className = "college-card-info";
@@ -107,15 +98,8 @@ function renderCollegeGrid() {
         name.className = "college-card-name";
         name.textContent = cat.name;
 
-        var count = document.createElement("div");
-        count.className = "college-card-count";
-        count.textContent =
-            cat.programs.length +
-            " programme" +
-            (cat.programs.length !== 1 ? "s" : "");
-
         info.appendChild(name);
-        info.appendChild(count);
+        // count element removed — subheading not shown per design update
         card.appendChild(bg);
         card.appendChild(info);
 
@@ -157,6 +141,18 @@ function selectCollege(categoryId, immediate) {
     );
     if (next) next.classList.add("active");
 
+    // Reset filter to All on college change
+    activeFilter = "All";
+    var levelFilter = document.getElementById("level-filter");
+    if (levelFilter) {
+        levelFilter.querySelectorAll(".filter-pill").forEach(function (p) {
+            p.classList.toggle(
+                "active",
+                p.getAttribute("data-level") === "All",
+            );
+        });
+    }
+
     activeCategoryId = categoryId;
     currentIndex = 0;
     currentPrograms = cat.programs;
@@ -193,9 +189,46 @@ function selectCollege(categoryId, immediate) {
 // ─── Render Cards ───
 function renderCards() {
     cardTrack.innerHTML = "";
-    cardTrack.style.transform = "";
 
-    currentPrograms.forEach(function (prog) {
+    if (isMobile()) {
+        // Mobile: native scroll — just reset scrollLeft, no transform
+        cardTrack.scrollLeft = 0;
+    } else {
+        // Desktop: reset transform (disable transition briefly so it's instant)
+        cardTrack.style.transition = "none";
+        cardTrack.style.transform = "translateX(0)";
+        requestAnimationFrame(function () { cardTrack.style.transition = ""; });
+    }
+
+    // Apply level filter
+    var filtered =
+        activeFilter === "All"
+            ? currentPrograms
+            : currentPrograms.filter(function (p) {
+                  return p.level === activeFilter;
+              });
+
+    // Update programme count to reflect filtered result
+    var totalCount = currentPrograms.length;
+    var filteredCount = filtered.length;
+    var labelSuffix =
+        activeFilter === "All"
+            ? ""
+            : " (" + filteredCount + " " + activeFilter + ")";
+    programmeCount.textContent =
+        totalCount + " Programme" + (totalCount !== 1 ? "s" : "") + labelSuffix;
+
+    if (filtered.length === 0) {
+        var msg = document.createElement("div");
+        msg.className = "no-results-msg";
+        msg.textContent = "No " + activeFilter + " programmes in this college.";
+        cardTrack.appendChild(msg);
+        updateCounter();
+        updateNavState();
+        return;
+    }
+
+    filtered.forEach(function (prog) {
         var card = document.createElement("article");
         card.className = "programme-card";
 
@@ -219,10 +252,21 @@ function renderCards() {
 
         cardTrack.appendChild(card);
     });
+
+    // Mobile: render dots after cards are in DOM
+    if (isMobile()) renderMobileDots();
 }
 
 // ─── Carousel Sliding ───
 function updateCarousel() {
+    if (isMobile()) {
+        // Mobile uses native scroll-snap — just sync the dots
+        var idx = Math.round(cardTrack.scrollLeft / (cardTrack.offsetWidth || 1));
+        updateActiveDot(idx);
+        return;
+    }
+
+    // Desktop: transform-based slide
     var cards = cardTrack.querySelectorAll(".programme-card");
     if (cards.length === 0) return;
 
@@ -240,7 +284,13 @@ function updateCarousel() {
 function nextCard() {
     if (isTransitioning) return;
     var visible = getVisibleCount();
-    var maxIdx = Math.max(0, currentPrograms.length - visible);
+    var filtered =
+        activeFilter === "All"
+            ? currentPrograms
+            : currentPrograms.filter(function (p) {
+                  return p.level === activeFilter;
+              });
+    var maxIdx = Math.max(0, filtered.length - visible);
     if (currentIndex < maxIdx) {
         currentIndex++;
         updateCarousel();
@@ -264,22 +314,23 @@ function getVisibleCount() {
 
 // ─── Counter & Progress ───
 function updateCounter() {
+    if (isMobile()) return; // dots replace counter on mobile
     var visible = getVisibleCount();
-    var total = currentPrograms.length;
+    var filtered = getFilteredPrograms();
+    var total = filtered.length;
     var endIdx = Math.min(currentIndex + visible, total);
-
     cardCurrent.textContent = endIdx;
     cardTotal.textContent = total;
-
     var maxIdx = Math.max(1, total - visible);
     var pct = total <= visible ? 100 : (currentIndex / maxIdx) * 100;
     progressFill.style.width = pct + "%";
 }
 
 function updateNavState() {
+    if (isMobile()) return; // no desktop nav on mobile
     var visible = getVisibleCount();
-    var maxIdx = Math.max(0, currentPrograms.length - visible);
-
+    var filtered = getFilteredPrograms();
+    var maxIdx = Math.max(0, filtered.length - visible);
     prevBtn.classList.toggle("disabled", currentIndex === 0);
     nextBtn.classList.toggle("disabled", currentIndex >= maxIdx);
 }
@@ -333,3 +384,175 @@ function initParticles() {
 
 // ─── Boot ───
 document.addEventListener("DOMContentLoaded", init);
+
+// ─── Desktop: click-hold-drag scroll with snap ───
+function initDragScroll() {
+    var carousel = document.querySelector(".card-carousel");
+    if (!carousel) return;
+
+    var isDragging = false;
+    var startX = 0;
+    var startOffset = 0;
+    var movedDuringDrag = false;
+
+    carousel.addEventListener("mousedown", function (e) {
+        if (e.button !== 0 || isMobile()) return;
+        var cards = cardTrack.querySelectorAll(".programme-card");
+        if (!cards.length) return;
+
+        isDragging = true;
+        movedDuringDrag = false;
+        startX = e.clientX;
+
+        var gap = parseFloat(getComputedStyle(cardTrack).gap) || 18;
+        startOffset = currentIndex * (cards[0].offsetWidth + gap);
+
+        cardTrack.style.transition = "none";
+        carousel.classList.add("dragging");
+        document.body.style.userSelect = "none";
+        e.preventDefault();
+    });
+
+    document.addEventListener("mousemove", function (e) {
+        if (!isDragging) return;
+        var delta = e.clientX - startX;
+        if (Math.abs(delta) > 4) movedDuringDrag = true;
+        cardTrack.style.transform = "translateX(-" + (startOffset - delta) + "px)";
+    });
+
+    document.addEventListener("mouseup", function (e) {
+        if (!isDragging) return;
+        isDragging = false;
+        carousel.classList.remove("dragging");
+        document.body.style.userSelect = "";
+        cardTrack.style.transition = "";
+
+        if (!movedDuringDrag) { updateCarousel(); return; }
+
+        var delta = e.clientX - startX;
+        var cards = cardTrack.querySelectorAll(".programme-card");
+        if (!cards.length) { updateCarousel(); return; }
+
+        var gap = parseFloat(getComputedStyle(cardTrack).gap) || 18;
+        var cardW = cards[0].offsetWidth + gap;
+        var filtered = getFilteredPrograms();
+        var maxIdx = Math.max(0, filtered.length - getVisibleCount());
+
+        // Snap by how many card-widths were dragged (threshold: 25% of card)
+        var steps = -Math.round(delta / (cardW * 0.25));
+        // Clamp to 1 card per gesture for natural feel
+        steps = Math.max(-1, Math.min(1, steps));
+        currentIndex = Math.max(0, Math.min(currentIndex + steps, maxIdx));
+        updateCarousel();
+    });
+}
+
+// ─── Mobile: dot pagination ───
+function renderMobileDots() {
+    var dotNav = document.getElementById("mobile-dot-nav");
+    if (!dotNav) return;
+    var filtered = getFilteredPrograms();
+    dotNav.innerHTML = "";
+
+    filtered.forEach(function (_, i) {
+        var dot = document.createElement("button");
+        dot.className = "mobile-dot" + (i === 0 ? " active" : "");
+        dot.setAttribute("role", "tab");
+        dot.setAttribute("aria-label", "Card " + (i + 1));
+        dot.addEventListener("click", function () {
+            var cards = cardTrack.querySelectorAll(".programme-card");
+            if (!cards[i]) return;
+            cards[i].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+        });
+        dotNav.appendChild(dot);
+    });
+}
+
+function updateActiveDot(index) {
+    var dots = document.querySelectorAll(".mobile-dot");
+    dots.forEach(function (d, i) { d.classList.toggle("active", i === index); });
+}
+
+// ─── Mobile: bottom-sheet college dropdown ───
+function initMobileDropdown() {
+    var trigger  = document.getElementById("mcd-trigger");
+    var panel    = document.getElementById("mcd-panel");
+    var backdrop = document.getElementById("mcd-backdrop");
+    var list     = document.getElementById("mcd-list");
+    var label    = document.getElementById("mcd-label");
+    if (!trigger || !panel) return;
+
+    // Populate list with all colleges
+    categories.forEach(function (cat) {
+        var item = document.createElement("div");
+        item.className = "mcd-item" + (cat.id === activeCategoryId ? " active" : "");
+        item.textContent = cat.name;
+        item.setAttribute("role", "option");
+        item.setAttribute("aria-selected", cat.id === activeCategoryId ? "true" : "false");
+
+        item.addEventListener("click", function () {
+            // Update active state in list
+            list.querySelectorAll(".mcd-item").forEach(function (el) {
+                el.classList.remove("active");
+                el.setAttribute("aria-selected", "false");
+            });
+            item.classList.add("active");
+            item.setAttribute("aria-selected", "true");
+            // Update trigger label
+            label.textContent = cat.name;
+            closeDropdown();
+            if (activeCategoryId !== cat.id) selectCollege(cat.id, false);
+        });
+
+        list.appendChild(item);
+    });
+
+    // Set initial label
+    var initCat = categories.find(function (c) { return c.id === activeCategoryId; });
+    if (initCat) label.textContent = initCat.name;
+
+    function openDropdown() {
+        panel.classList.add("open");
+        backdrop.classList.add("open");
+        trigger.setAttribute("aria-expanded", "true");
+    }
+    function closeDropdown() {
+        panel.classList.remove("open");
+        backdrop.classList.remove("open");
+        trigger.setAttribute("aria-expanded", "false");
+    }
+
+    trigger.addEventListener("click", function () {
+        panel.classList.contains("open") ? closeDropdown() : openDropdown();
+    });
+    backdrop.addEventListener("click", closeDropdown);
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && panel.classList.contains("open")) closeDropdown();
+    });
+
+    // When selectCollege is called externally, sync the trigger label
+    var _origSelectCollege = selectCollege;
+    selectCollege = function (categoryId, immediate) {
+        var cat = categories.find(function (c) { return c.id === categoryId; });
+        if (cat && label) label.textContent = cat.name;
+        // Sync active state in list
+        if (list) {
+            list.querySelectorAll(".mcd-item").forEach(function (el, i) {
+                var active = categories[i] && categories[i].id === categoryId;
+                el.classList.toggle("active", active);
+                el.setAttribute("aria-selected", active ? "true" : "false");
+            });
+        }
+        _origSelectCollege(categoryId, immediate);
+    };
+
+    // Mobile scroll → sync dots
+    cardTrack.addEventListener("scroll", function () {
+        if (!isMobile()) return;
+        var cards = cardTrack.querySelectorAll(".programme-card");
+        if (!cards.length) return;
+        var cardW = cards[0].offsetWidth + (parseFloat(getComputedStyle(cardTrack).gap) || 18);
+        var idx = Math.round(cardTrack.scrollLeft / cardW);
+        updateActiveDot(idx);
+    }, { passive: true });
+}
