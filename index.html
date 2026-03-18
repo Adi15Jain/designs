@@ -14,7 +14,7 @@
     </head>
     <body>
         <section class="programmes-section" id="programmes">
-            <!-- Background Image Layer -->
+            <!-- Background Layer -->
             <div class="bg-image-layer" aria-hidden="true"></div>
 
             <!-- Animated Mesh Blobs -->
@@ -31,17 +31,87 @@
                 aria-hidden="true"
             ></canvas>
 
-            <!-- Glass Shell -->
             <div class="glass-shell">
+                <!-- ═══════════════════════════════════════════
+                     DESKTOP HEADER: Eyebrow + Title | Pills + Search
+                     ═══════════════════════════════════════════ -->
                 <header class="section-header">
-                    <p class="section-eyebrow">Explore Academic Excellence</p>
-                    <h1 class="section-title">
-                        Programmes <span class="accent">Offered</span>
-                    </h1>
+                    <div class="header-titles">
+                        <p class="section-eyebrow">
+                            Explore Academic Excellence
+                        </p>
+                        <h1 class="section-title">
+                            Programmes <span class="accent">Offered</span>
+                        </h1>
+                    </div>
+
+                    <!-- Filter Row -->
+                    <div class="header-filters">
+                        <p id="programme-count" class="programme-count">
+                            0 Programmes
+                        </p>
+                        <div class="level-filter" id="level-filter">
+                            <button class="filter-pill active" data-level="All">
+                                All
+                            </button>
+                            <button class="filter-pill" data-level="UG">
+                                UG
+                            </button>
+                            <button class="filter-pill" data-level="PG">
+                                PG
+                            </button>
+                            <button class="filter-pill" data-level="Doctorate">
+                                Doctorate
+                            </button>
+                        </div>
+
+                        <!-- Desktop-only search -->
+                        <div
+                            class="search-wrap desktop-only"
+                            aria-label="Search programmes"
+                        >
+                            <svg
+                                class="search-icon"
+                                width="15"
+                                height="15"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <circle cx="11" cy="11" r="8" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
+                            <input
+                                type="text"
+                                id="search-input"
+                                class="search-input"
+                                placeholder="Search programmes…"
+                                autocomplete="off"
+                                aria-label="Search programmes"
+                            />
+                        </div>
+                    </div>
                 </header>
 
-                <!-- Mobile: Bottom-sheet college picker (hidden on desktop) -->
-                <div class="mobile-college-dropdown" id="mobile-dropdown">
+                <!-- ═══════════════════════════════════════════
+                     DESKTOP: Horizontal College Selector Cards
+                     ═══════════════════════════════════════════ -->
+                <div class="college-tabs-container">
+                    <div
+                        id="college-tabs"
+                        class="college-tabs"
+                        role="tablist"
+                        aria-label="Select college"
+                    ></div>
+                </div>
+
+                <!-- ═══════════════════════════════════════════
+                     MOBILE: Trigger Button (Hidden on Desktop)
+                     ═══════════════════════════════════════════ -->
+                <div class="mobile-college-trigger">
                     <button
                         class="mcd-trigger"
                         id="mcd-trigger"
@@ -49,7 +119,11 @@
                         aria-haspopup="listbox"
                     >
                         <div class="mcd-trigger-left">
-                            <span class="mcd-icon">🏛️</span>
+                            <span class="mcd-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M2 20h20"/><path d="M12 3L3 8h18L12 3z"/><line x1="5" y1="8" x2="5" y2="20"/><line x1="9" y1="8" x2="9" y2="20"/><line x1="15" y1="8" x2="15" y2="20"/><line x1="19" y1="8" x2="19" y2="20"/>
+                                </svg>
+                            </span>
                             <div class="mcd-trigger-text">
                                 <span class="mcd-sublabel"
                                     >Browse by College</span
@@ -73,91 +147,133 @@
                             <path d="M6 9l6 6 6-6" />
                         </svg>
                     </button>
-                    <!-- Backdrop -->
+                </div>
+
+                <!-- ═══════════════════════════════════════════
+                     MOBILE: Bottom Sheet Panel (Hidden on Desktop)
+                     ═══════════════════════════════════════════ -->
+                <div class="mobile-bottom-sheet" id="mobile-sheet">
                     <div class="mcd-backdrop" id="mcd-backdrop"></div>
-                    <!-- Bottom Sheet Panel -->
                     <div
                         class="mcd-panel"
                         id="mcd-panel"
                         role="listbox"
                         aria-label="Select College"
                     >
-                        <div class="mcd-panel-handle"></div>
-                        <p class="mcd-panel-title">Browse by College</p>
-                        <div class="mcd-list" id="mcd-list"></div>
+                        <div class="mcd-panel-header">
+                            <div class="mcd-panel-handle-area" id="mcd-close-btn" role="button" aria-label="Close">
+                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="mcd-search-wrap">
+                                <svg
+                                    class="mcd-search-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line
+                                        x1="21"
+                                        y1="21"
+                                        x2="16.65"
+                                        y2="16.65"
+                                    />
+                                </svg>
+                                <input
+                                    type="text"
+                                    class="mcd-search"
+                                    id="mcd-search"
+                                    placeholder="Search colleges..."
+                                    autocomplete="off"
+                                />
+                            </div>
+                        </div>
+                        <div class="mcd-list-wrap">
+                            <div class="mcd-list" id="mcd-list"></div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- ═══════════════════════════════════════════
+                     DESKTOP: Grid Content Area
+                     ═══════════════════════════════════════════ -->
                 <div class="content-layout">
-                    <!-- College Selector Grid -->
-                    <aside class="college-panel">
-                        <div class="panel-heading">
-                            Browse by <span class="accent">College</span>
-                        </div>
-                        <div id="college-grid" class="college-grid"></div>
-                    </aside>
-
-                    <!-- Programme Showcase -->
                     <div class="programme-showcase">
-                        <div class="showcase-top">
-                            <!-- Row 1: College name (left) + card counter (right) -->
-                            <div class="showcase-row">
-                                <h2
-                                    id="college-name"
-                                    class="active-college-name"
-                                ></h2>
-                                <div
-                                    class="card-counter glass-pill"
-                                    id="card-counter"
+                        <!-- Desktop: Grid subtitle + grid -->
+                        <p
+                            id="grid-subtitle"
+                            class="grid-subtitle desktop-only"
+                        >
+                            Showing programmes…
+                        </p>
+
+                        <!-- Desktop Grid -->
+                        <div
+                            id="programme-grid"
+                            class="programme-grid desktop-only"
+                        ></div>
+
+                        <!-- Desktop Load More -->
+                        <div class="load-more-wrap desktop-only">
+                            <button
+                                id="load-more-btn"
+                                class="load-more-btn"
+                                aria-label="Load more programmes"
+                            >
+                                Load More
+                                <svg
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
                                 >
-                                    <span id="card-current">1</span>
-                                    <span class="counter-slash">—</span>
-                                    <span id="card-total">0</span>
-                                </div>
-                            </div>
-                            <!-- Row 2: Programme count (left) + filter pills (right) -->
-                            <div class="showcase-row showcase-row--sub">
-                                <p
-                                    id="programme-count"
-                                    class="programme-count"
-                                ></p>
-                                <div class="level-filter" id="level-filter">
-                                    <button
-                                        class="filter-pill active"
-                                        data-level="All"
-                                    >
-                                        All
-                                    </button>
-                                    <button class="filter-pill" data-level="UG">
-                                        UG
-                                    </button>
-                                    <button class="filter-pill" data-level="PG">
-                                        PG
-                                    </button>
-                                    <button
-                                        class="filter-pill"
-                                        data-level="Doctorate"
-                                    >
-                                        Doctorate
-                                    </button>
-                                </div>
-                            </div>
+                                    <path d="M12 5v14M5 12l7 7 7-7" />
+                                </svg>
+                            </button>
                         </div>
 
-                        <!-- 3-Card Carousel -->
-                        <div class="card-carousel">
+                        <!-- Mobile: Carousel (Hidden on Desktop) -->
+                        <div class="card-carousel mobile-only">
                             <div id="card-track" class="card-track"></div>
                         </div>
 
-                        <!-- Mobile: Dot Pagination (hidden on desktop) -->
+                        <!-- Swipe Cue (Mobile) -->
+                        <div class="swipe-cue mobile-only" id="swipe-cue">
+                            Swipe to explore
+                            <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                            </svg>
+                        </div>
+
+                        <!-- Mobile: Dot Pagination -->
                         <div
-                            class="mobile-dot-nav"
+                            class="mobile-dot-nav mobile-only"
                             id="mobile-dot-nav"
                             role="tablist"
-                            aria-label="Programme cards"
                         ></div>
 
-                        <div class="nav-row">
+                        <!-- Navigation Controls (Mobile) -->
+                        <div class="nav-row mobile-only">
                             <button
                                 id="prev-btn"
                                 class="nav-btn"
@@ -176,11 +292,16 @@
                                     <path d="M15 18l-6-6 6-6" />
                                 </svg>
                             </button>
-                            <div class="progress-track">
-                                <div
-                                    id="progress-fill"
-                                    class="progress-fill"
-                                ></div>
+                            <div class="progress-wrap">
+                                <span class="progress-text" id="progress-text"
+                                    >1 / 4</span
+                                >
+                                <div class="progress-track">
+                                    <div
+                                        id="progress-fill"
+                                        class="progress-fill"
+                                    ></div>
+                                </div>
                             </div>
                             <button
                                 id="next-btn"
