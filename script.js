@@ -498,7 +498,7 @@ function applyFiltersAndRender() {
 
     // Update all count badges
     document.querySelectorAll(".programme-count").forEach((el) => {
-        el.textContent = `${filtered.length} Programme${filtered.length !== 1 ? "s" : ""}`;
+        el.innerHTML = `<span class="count-number">${filtered.length}</span> <span>Programme${filtered.length !== 1 ? "s" : ""}</span>`;
     });
 
     if (isNativeScroller) {
@@ -921,14 +921,48 @@ function initMobileSheetBehavior() {
     if (!mcdTrigger) return;
     mcdTrigger.addEventListener("click", openMobileSheet);
     if (mcdBackdrop) mcdBackdrop.addEventListener("click", closeMobileSheet);
-    if (mcdSearch)
+    if (mcdSearch) {
         mcdSearch.addEventListener("input", (e) =>
             filterSheetList(e.target.value),
         );
+    }
 
     const closeBtn = document.getElementById("mcd-close-btn");
     if (closeBtn) {
         closeBtn.addEventListener("click", closeMobileSheet);
+        
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+        
+        closeBtn.addEventListener("touchstart", (e) => {
+            startY = e.touches[0].clientY;
+            isDragging = true;
+            if (mcdPanel) mcdPanel.classList.add("dragging");
+        }, { passive: true });
+        
+        closeBtn.addEventListener("touchmove", (e) => {
+            if (!isDragging || !mcdPanel) return;
+            currentY = e.touches[0].clientY;
+            let diff = currentY - startY;
+            if (diff > 0) { 
+                mcdPanel.style.transform = `translateY(${diff}px)`;
+            }
+        });
+        
+        closeBtn.addEventListener("touchend", () => {
+            if (!isDragging) return;
+            isDragging = false;
+            if (mcdPanel) {
+                mcdPanel.classList.remove("dragging");
+                let diff = currentY - startY;
+                if (diff > 80) {
+                    closeMobileSheet();
+                } else {
+                    mcdPanel.style.transform = "";
+                }
+            }
+        });
     }
 }
 
