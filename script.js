@@ -89,7 +89,7 @@ let activeCategoryId = "all"; // "all" = All Colleges
 let activeFilter = "All";
 let searchQuery = "";
 let visibleCount = 12; // Desktop Load More page size
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 999;
 
 let currentIndex = 0;
 let currentPrograms = []; // Mobile carousel programs

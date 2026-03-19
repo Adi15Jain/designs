@@ -57,8 +57,8 @@ body {
 .programmes-section {
     position: relative;
     width: 100%;
-    height: 90vh;
-    max-height: 90vh;
+    height: 92vh;
+    max-height: 92vh;
     overflow: hidden;
     font-family: "Inter", sans-serif;
     color: var(--text);
@@ -162,7 +162,7 @@ body {
     flex: 1 1 auto;
 }
 .section-eyebrow {
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.18em;
@@ -170,7 +170,7 @@ body {
     margin-bottom: 0.4rem;
 }
 .section-title {
-    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    font-size: clamp(2.6rem, 4.5vw, 3.8rem);
     font-weight: 800;
     color: var(--navy);
     line-height: 1.08;
@@ -198,17 +198,17 @@ body {
     gap: 6px;
     background: rgba(255, 255, 255, 0.7);
     backdrop-filter: blur(12px);
-    padding: 4px;
+    padding: 6px;
     border-radius: 100px;
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
 }
 .filter-pill {
-    padding: 7px 18px;
+    padding: 10px 22px;
     border-radius: 100px;
     border: none;
     background: transparent;
-    font-size: 0.78rem;
+    font-size: 0.9rem;
     font-weight: 700;
     color: var(--text-muted);
     cursor: pointer;
@@ -234,22 +234,22 @@ body {
 }
 .search-icon {
     position: absolute;
-    left: 13px;
+    left: 16px;
     color: var(--text-muted);
     pointer-events: none;
     flex-shrink: 0;
 }
 .search-input {
-    padding: 9px 16px 9px 36px;
+    padding: 12px 20px 12px 42px;
     border-radius: 100px;
     border: 1px solid var(--border-strong);
     background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     font-family: inherit;
-    font-size: 0.82rem;
+    font-size: 0.92rem;
     font-weight: 500;
     color: var(--text);
-    width: 220px;
+    width: 260px;
     outline: none;
     transition: all 0.25s var(--ease-out);
     box-shadow: var(--shadow-sm);
@@ -262,7 +262,7 @@ body {
     box-shadow:
         0 0 0 3px var(--orange-light),
         var(--shadow-sm);
-    width: 260px;
+    width: 300px;
     background: #fff;
 }
 
@@ -659,10 +659,10 @@ body {
 
 /* Subtitle */
 .grid-subtitle {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-muted);
-    margin-bottom: 0.8rem;
+    margin-bottom: 1.2rem;
     letter-spacing: 0.01em;
     flex-shrink: 0;
 }
@@ -673,21 +673,34 @@ body {
 
 /* Programme Grid */
 .programme-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 22px;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    gap: 24px;
+    padding-bottom: 24px;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
     transition:
         opacity 0.3s ease,
         transform 0.3s ease;
 }
+.programme-grid::-webkit-scrollbar {
+    height: 8px;
+}
+.programme-grid::-webkit-scrollbar-track {
+    background: rgba(0, 33, 71, 0.05);
+    border-radius: 10px;
+}
+.programme-grid::-webkit-scrollbar-thumb {
+    background: rgba(0, 33, 71, 0.2);
+    border-radius: 10px;
+}
+.programme-grid::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 33, 71, 0.35);
+}
 .programme-grid.fading {
     opacity: 0;
     transform: scale(0.985);
-}
-@media (max-width: 1100px) {
-    .programme-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -707,6 +720,9 @@ body {
         transform 0.3s var(--ease-out),
         box-shadow 0.3s var(--ease-out);
     animation: cardFadeIn 0.4s var(--ease-out) backwards;
+    flex: 0 0 calc(33.333% - 16px);
+    scroll-snap-align: start;
+    min-width: 320px;
 }
 .programme-card:hover {
     transform: translateY(-7px);
@@ -719,7 +735,9 @@ body {
 
 /* Card Image */
 .card-image-wrap {
-    height: 200px;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    width: 100%;
     position: relative;
     overflow: hidden;
     background: #e8eaf0;
@@ -1150,7 +1168,7 @@ body {
         scroll-snap-align: center;
     }
     .card-image-wrap {
-        height: auto; 
+        height: auto;
         aspect-ratio: 1 / 1; /* Square images precisely as requested */
         width: 100%;
     }
