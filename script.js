@@ -54,7 +54,13 @@ const collegeIcons = {
 };
 
 // ─── DOM ───
-const tabsContainer = document.getElementById("college-tabs");
+const desktopDropdownTrigger = document.getElementById("dcd-trigger");
+const desktopDropdownLabel = document.getElementById("dcd-label");
+const desktopDropdownIcon = document.getElementById("dcd-icon");
+const desktopDropdownPanel = document.getElementById("dcd-panel");
+const desktopDropdownList = document.getElementById("dcd-list");
+const desktopDropdown = document.querySelector(".desktop-college-dropdown");
+
 const cardTrack = document.getElementById("card-track");
 const progGrid = document.getElementById("programme-grid");
 const gridSubtitle = document.getElementById("grid-subtitle");
@@ -94,29 +100,37 @@ let hasScrolledOnce = false;
 // ─── Init ───
 function init() {
     checkMobile();
-    renderCollegeCards();
+    renderDesktopDropdown();
+    initDesktopDropdownBehavior();
     initMobileSheetList();
 
     // Select "All Colleges" by default
     selectCollege("all", true);
 
     // Level filter
-    const levelFilter = document.getElementById("level-filter");
-    if (levelFilter) {
+    document.querySelectorAll(".level-filter-multi").forEach((levelFilter) => {
         levelFilter.addEventListener("click", (e) => {
             const pill = e.target.closest(".filter-pill");
             if (!pill) return;
             const level = pill.getAttribute("data-level");
             if (level === activeFilter) return;
-            levelFilter
-                .querySelectorAll(".filter-pill")
-                .forEach((p) => p.classList.toggle("active", p === pill));
+
+            // Sync all instances
+            document
+                .querySelectorAll(".level-filter-multi .filter-pill")
+                .forEach((p) => {
+                    if (p.getAttribute("data-level") === level) {
+                        p.classList.add("active");
+                    } else {
+                        p.classList.remove("active");
+                    }
+                });
             activeFilter = level;
             currentIndex = 0;
             visibleCount = PAGE_SIZE;
             applyFiltersAndRender();
         });
-    }
+    });
 
     // Desktop search
     if (searchInput) {
@@ -193,37 +207,35 @@ function checkMobile() {
 //  DESKTOP: COLLEGE SELECTOR CARDS
 // ═══════════════════════════════════════════════════════════════
 
-function renderCollegeCards() {
-    tabsContainer.innerHTML = "";
+function renderDesktopDropdown() {
+    if (!desktopDropdownList) return;
+    desktopDropdownList.innerHTML = "";
 
-    // "All Colleges" card
-    const allCard = buildCollegeCard({
+    // "All Colleges" item
+    const allItem = buildDesktopDropdownItem({
         id: "all",
         name: "All Colleges",
         image: "",
         icon: collegeIcons["all"],
         count: categories.reduce((s, c) => s + c.programs.length, 0),
     });
-    tabsContainer.appendChild(allCard);
+    desktopDropdownList.appendChild(allItem);
 
     categories.forEach((cat) => {
-        const card = buildCollegeCard({
+        const item = buildDesktopDropdownItem({
             id: cat.id,
             name: cat.name,
             image: cat.image || "",
             icon: collegeIcons[cat.id] || collegeIcons["all"],
             count: cat.programs.length,
         });
-        tabsContainer.appendChild(card);
+        desktopDropdownList.appendChild(item);
     });
-
-    // Mark first as active
-    tabsContainer.querySelector(".college-card").classList.add("active");
 }
 
-function buildCollegeCard({ id, name, image, icon, count }) {
+function buildDesktopDropdownItem({ id, name, image, icon, count }) {
     const btn = document.createElement("button");
-    btn.className = "college-card";
+    btn.className = `college-card ${id === activeCategoryId ? "active" : ""}`;
     btn.setAttribute("role", "tab");
     btn.setAttribute("aria-label", `${name} — ${count} programmes`);
     btn.dataset.id = id;
@@ -238,19 +250,56 @@ function buildCollegeCard({ id, name, image, icon, count }) {
 
     btn.innerHTML = `
         ${thumbHtml}
-        <div class="college-card-body">
-            <div class="college-card-icon">${icon}</div>
-            <span class="college-card-name">${name}</span>
-            <span class="college-card-badge">${count} Programme${count !== 1 ? "s" : ""}</span>
+        <div class="glass-badge-container">
+            <div class="glass-badge">${name}</div>
+            <div class="glass-badge-count">${count} Programme${count !== 1 ? "s" : ""}</div>
         </div>
     `;
 
     btn.addEventListener("click", () => {
-        if (id === activeCategoryId) return;
-        selectCollege(id);
+        if (desktopDropdown) desktopDropdown.classList.remove("open");
+        if (desktopDropdownTrigger)
+            desktopDropdownTrigger.setAttribute("aria-expanded", "false");
+
+        if (id !== activeCategoryId) {
+            selectCollege(id);
+        }
     });
 
     return btn;
+}
+
+function initDesktopDropdownBehavior() {
+    if (!desktopDropdownTrigger || !desktopDropdown) return;
+    
+    const desktopBackdrop = document.getElementById("dcd-backdrop");
+
+    if (desktopBackdrop) {
+        desktopBackdrop.addEventListener("click", (e) => {
+            e.stopPropagation();
+            desktopDropdown.classList.remove("open");
+            desktopDropdownTrigger.setAttribute("aria-expanded", "false");
+        });
+    }
+
+    desktopDropdownTrigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = desktopDropdown.classList.contains("open");
+        if (isOpen) {
+            desktopDropdown.classList.remove("open");
+            desktopDropdownTrigger.setAttribute("aria-expanded", "false");
+        } else {
+            desktopDropdown.classList.add("open");
+            desktopDropdownTrigger.setAttribute("aria-expanded", "true");
+        }
+    });
+
+    document.addEventListener("click", (e) => {
+        if (!desktopDropdown.contains(e.target)) {
+            desktopDropdown.classList.remove("open");
+            desktopDropdownTrigger.setAttribute("aria-expanded", "false");
+        }
+    });
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -275,24 +324,27 @@ function selectCollege(id, immediate = false) {
     // Reset search input
     if (searchInput) searchInput.value = "";
 
-    // Update active college card (desktop)
-    tabsContainer.querySelectorAll(".college-card").forEach((c) => {
-        c.classList.toggle("active", c.dataset.id === id);
-    });
-
-    // Scroll active card into view (desktop only)
-    const activeCard = tabsContainer.querySelector(".college-card.active");
-    if (activeCard && !isNativeScroller) {
-        try {
-            activeCard.scrollIntoView({
-                behavior: "smooth",
-                inline: "center",
-                block: "nearest",
+    // Update desktop dropdown menu selection
+    if (desktopDropdownList) {
+        desktopDropdownList
+            .querySelectorAll(".college-card")
+            .forEach((item) => {
+                item.classList.toggle("active", item.dataset.id === id);
             });
-        } catch (e) {
-            // Fallback for older browsers
-            activeCard.scrollIntoView();
-        }
+    }
+
+    // Update desktop dropdown trigger label and icon
+    if (id === "all") {
+        if (desktopDropdownLabel)
+            desktopDropdownLabel.textContent = "All Colleges";
+        if (desktopDropdownIcon)
+            desktopDropdownIcon.innerHTML = collegeIcons["all"];
+    } else {
+        const cat = categories.find((c) => c.id === id);
+        if (cat && desktopDropdownLabel)
+            desktopDropdownLabel.textContent = cat.name;
+        if (cat && desktopDropdownIcon)
+            desktopDropdownIcon.innerHTML = collegeIcons[cat.id] || "🎓";
     }
 
     // Update mobile label and icon
@@ -303,7 +355,8 @@ function selectCollege(id, immediate = false) {
     } else {
         const cat = categories.find((c) => c.id === id);
         if (cat && mcdLabel) mcdLabel.textContent = cat.name;
-        if (cat && triggerIcon) triggerIcon.innerHTML = collegeIcons[cat.id] || "🎓";
+        if (cat && triggerIcon)
+            triggerIcon.innerHTML = collegeIcons[cat.id] || "🎓";
     }
 
     // Update mobile bottom sheet selection
@@ -381,8 +434,8 @@ function getFilteredPrograms() {
 }
 
 function updateAvailablePills() {
-    const filterContainer = document.getElementById("level-filter");
-    if (!filterContainer) return;
+    const filterContainers = document.querySelectorAll(".level-filter-multi");
+    if (!filterContainers.length) return;
 
     let available = {};
     if (activeCategoryId === "all") {
@@ -398,21 +451,25 @@ function updateAvailablePills() {
     }
 
     let needsReset = false;
-    filterContainer.querySelectorAll(".filter-pill").forEach((pill) => {
-        const lvl = pill.dataset.level;
-        if (lvl === "All") return;
-        const has = !!available[lvl];
-        pill.style.display = has ? "" : "none";
-        if (!has && lvl === activeFilter) needsReset = true;
+    filterContainers.forEach((filterContainer) => {
+        filterContainer.querySelectorAll(".filter-pill").forEach((pill) => {
+            const lvl = pill.dataset.level;
+            if (lvl === "All") return;
+            const has = !!available[lvl];
+            pill.style.display = has ? "" : "none";
+            if (!has && lvl === activeFilter) needsReset = true;
+        });
     });
 
     if (needsReset) {
         activeFilter = "All";
-        filterContainer
-            .querySelectorAll(".filter-pill")
-            .forEach((p) =>
-                p.classList.toggle("active", p.dataset.level === "All"),
-            );
+        filterContainers.forEach((filterContainer) => {
+            filterContainer
+                .querySelectorAll(".filter-pill")
+                .forEach((p) =>
+                    p.classList.toggle("active", p.dataset.level === "All"),
+                );
+        });
     }
 }
 
@@ -439,10 +496,10 @@ function withFade(fn) {
 function applyFiltersAndRender() {
     const filtered = getFilteredPrograms();
 
-    // Update count badge
-    if (programmeCount) {
-        programmeCount.textContent = `${filtered.length} Programme${filtered.length !== 1 ? "s" : ""}`;
-    }
+    // Update all count badges
+    document.querySelectorAll(".programme-count").forEach((el) => {
+        el.textContent = `${filtered.length} Programme${filtered.length !== 1 ? "s" : ""}`;
+    });
 
     if (isNativeScroller) {
         // Mobile path: render carousel from currentPrograms filtered by activeFilter
@@ -834,16 +891,16 @@ function openMobileSheet() {
 
 function closeMobileSheet() {
     if (!mcdPanel) return;
-    
+
     // Visually initiate close
     mcdPanel.classList.remove("open");
     mcdBackdrop.classList.remove("open");
     if (mcdTrigger) mcdTrigger.setAttribute("aria-expanded", "false");
     document.body.style.overflow = "";
     mcdPanel.style.transform = "";
-    
+
     // Explicitly hide the root container instantly, but preserve animation visibility
-    // The panel and backdrop will fade/slide away. 
+    // The panel and backdrop will fade/slide away.
     // To prevent any ghost clicks or the sheet remaining, hide it after 400ms.
     setTimeout(() => {
         if (!mcdPanel.classList.contains("open") && mcdSheet) {

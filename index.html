@@ -45,12 +45,15 @@
                         </h1>
                     </div>
 
-                    <!-- Filter Row -->
-                    <div class="header-filters">
-                        <p id="programme-count" class="programme-count">
+                    <!-- Filter Row (Mobile Only) -->
+                    <div class="header-filters mobile-only">
+                        <p id="programme-count-mobile" class="programme-count">
                             0 Programmes
                         </p>
-                        <div class="level-filter" id="level-filter">
+                        <div
+                            class="level-filter level-filter-multi"
+                            data-target="mobile"
+                        >
                             <button class="filter-pill active" data-level="All">
                                 All
                             </button>
@@ -64,12 +67,99 @@
                                 Doctorate
                             </button>
                         </div>
+                    </div>
+                </header>
 
-                        <!-- Desktop-only search -->
-                        <div
-                            class="search-wrap desktop-only"
-                            aria-label="Search programmes"
+                <!-- ═══════════════════════════════════════════
+                     DESKTOP: Action Area (Dropdown + Filters/Search)
+                     ═══════════════════════════════════════════ -->
+                <div class="desktop-action-area desktop-only">
+                    <!-- Top Row: Dropdown -->
+                    <div class="desktop-college-dropdown">
+                        <button
+                            class="dcd-trigger"
+                            id="dcd-trigger"
+                            aria-expanded="false"
+                            aria-haspopup="listbox"
                         >
+                            <div class="dcd-trigger-left">
+                                <span class="dcd-icon" id="dcd-icon">
+                                    <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="1.75"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    >
+                                        <path d="M2 20h20" />
+                                        <path d="M12 3L3 8h18L12 3z" />
+                                        <line x1="5" y1="8" x2="5" y2="20" />
+                                        <line x1="9" y1="8" x2="9" y2="20" />
+                                        <line x1="15" y1="8" x2="15" y2="20" />
+                                        <line x1="19" y1="8" x2="19" y2="20" />
+                                    </svg>
+                                </span>
+                                <div class="dcd-trigger-text">
+                                    <span class="dcd-sublabel"
+                                        >Browse by College</span
+                                    >
+                                    <span class="dcd-label" id="dcd-label"
+                                        >All Colleges</span
+                                    >
+                                </div>
+                            </div>
+                            <svg
+                                class="dcd-chevron"
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.5"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            >
+                                <path d="M6 9l6 6 6-6" />
+                            </svg>
+                        </button>
+
+                        <div class="dcd-backdrop" id="dcd-backdrop"></div>
+
+                        <div
+                            class="dcd-panel"
+                            id="dcd-panel"
+                            role="listbox"
+                            aria-label="Select College"
+                        >
+                            <div class="dcd-list-wrap">
+                                <div class="dcd-card-grid" id="dcd-list"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Row: Filters and Search -->
+                    <div class="desktop-action-bottom">
+                        <div
+                            class="level-filter level-filter-multi"
+                            data-target="desktop"
+                        >
+                            <button class="filter-pill active" data-level="All">
+                                All
+                            </button>
+                            <button class="filter-pill" data-level="UG">
+                                UG
+                            </button>
+                            <button class="filter-pill" data-level="PG">
+                                PG
+                            </button>
+                            <button class="filter-pill" data-level="Doctorate">
+                                Doctorate
+                            </button>
+                        </div>
+                        <div class="search-wrap" aria-label="Search programmes">
                             <svg
                                 class="search-icon"
                                 width="15"
@@ -93,19 +183,10 @@
                                 aria-label="Search programmes"
                             />
                         </div>
+                        <p id="programme-count" class="programme-count">
+                            0 Programmes
+                        </p>
                     </div>
-                </header>
-
-                <!-- ═══════════════════════════════════════════
-                     DESKTOP: Horizontal College Selector Cards
-                     ═══════════════════════════════════════════ -->
-                <div class="college-tabs-container">
-                    <div
-                        id="college-tabs"
-                        class="college-tabs"
-                        role="tablist"
-                        aria-label="Select college"
-                    ></div>
                 </div>
 
                 <!-- ═══════════════════════════════════════════
@@ -120,8 +201,22 @@
                     >
                         <div class="mcd-trigger-left">
                             <span class="mcd-icon">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M2 20h20"/><path d="M12 3L3 8h18L12 3z"/><line x1="5" y1="8" x2="5" y2="20"/><line x1="9" y1="8" x2="9" y2="20"/><line x1="15" y1="8" x2="15" y2="20"/><line x1="19" y1="8" x2="19" y2="20"/>
+                                <svg
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.75"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="M2 20h20" />
+                                    <path d="M12 3L3 8h18L12 3z" />
+                                    <line x1="5" y1="8" x2="5" y2="20" />
+                                    <line x1="9" y1="8" x2="9" y2="20" />
+                                    <line x1="15" y1="8" x2="15" y2="20" />
+                                    <line x1="19" y1="8" x2="19" y2="20" />
                                 </svg>
                             </span>
                             <div class="mcd-trigger-text">
@@ -161,9 +256,25 @@
                         aria-label="Select College"
                     >
                         <div class="mcd-panel-header">
-                            <div class="mcd-panel-handle-area" id="mcd-close-btn" role="button" aria-label="Close">
-                                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <polyline points="6 9 12 15 18 9"></polyline>
+                            <div
+                                class="mcd-panel-handle-area"
+                                id="mcd-close-btn"
+                                role="button"
+                                aria-label="Close"
+                            >
+                                <svg
+                                    width="32"
+                                    height="32"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2.5"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <polyline
+                                        points="6 9 12 15 18 9"
+                                    ></polyline>
                                 </svg>
                             </div>
                             <div class="mcd-search-wrap">

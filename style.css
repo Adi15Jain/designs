@@ -267,49 +267,237 @@ body {
 }
 
 /* ═══════════════════════════════════════════════════
-   DESKTOP: COLLEGE SELECTOR CARD ROW
+   DESKTOP: ACTION AREA & DROPDOWN COLLEGE SELECTOR
    ═══════════════════════════════════════════════════ */
-.college-tabs-container {
-    width: 100%;
-    margin-bottom: 1.2rem;
+.desktop-action-area {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 24px;
+    z-index: 50; /* sit above the grid */
     position: relative;
+    flex-wrap: wrap;
+}
+
+.desktop-college-dropdown {
+    width: 340px;
     flex-shrink: 0;
 }
-.college-tabs-container::after {
-    content: "";
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 8px;
-    width: 80px;
-    background: linear-gradient(to left, var(--bg-color), transparent);
-    pointer-events: none;
-    z-index: 2;
-}
-.college-tabs {
+
+.dcd-trigger {
+    width: 100%;
     display: flex;
-    gap: 12px;
-    overflow-x: auto;
-    padding-bottom: 12px;
-    padding-top: 4px;
-    padding-right: 60px;
-    scroll-behavior: smooth;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.25s var(--ease-out);
+    font-family: inherit;
+    text-align: left;
+    position: relative;
+    z-index: 101;
 }
-.college-tabs::-webkit-scrollbar {
+.dcd-trigger:hover {
+    border-color: rgba(0, 33, 71, 0.3);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+}
+.dcd-trigger[aria-expanded="true"] {
+    border-color: var(--orange);
+    box-shadow:
+        0 0 0 3px var(--orange-light),
+        var(--shadow-sm);
+    background: #fff;
+}
+.dcd-trigger[aria-expanded="true"] .dcd-chevron {
+    transform: rotate(180deg);
+}
+
+.dcd-trigger-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.dcd-icon {
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.dcd-trigger-text {
+    display: flex;
+    flex-direction: column;
+}
+.dcd-sublabel {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 2px;
+}
+.dcd-label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--navy);
+}
+.dcd-chevron {
+    color: var(--text-muted);
+    transition: transform 0.3s var(--ease-out);
+}
+
+.dcd-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(240, 244, 248, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s var(--ease-out);
+}
+.desktop-college-dropdown.open .dcd-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.dcd-panel {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 40px rgba(0, 33, 71, 0.12);
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    transition:
+        opacity 0.3s var(--ease-out),
+        transform 0.3s var(--ease-out);
+    z-index: 101;
+}
+.desktop-college-dropdown.open .dcd-panel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.dcd-list-wrap {
+    width: 100%;
+}
+
+.dcd-card-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+    padding: 32px;
+}
+@media (max-width: 1050px) {
+    .dcd-card-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ───────────────────────────────────────────────────
+   Desktop Modal Enlargement & Glassmorphic Overlay
+   ─────────────────────────────────────────────────── */
+.dcd-panel .college-card {
+    position: relative;
+    height: 128px;
+    padding: 0;
+    overflow: hidden;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-md);
+    display: block;
+}
+
+.dcd-panel .college-card-thumb-wrap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.dcd-panel .glass-badge-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 12px;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.dcd-panel .glass-badge,
+.dcd-panel .glass-badge-count {
+    width: auto;
+    max-width: 90%;
+    margin: 0;
+    padding: 6px 14px;
+    background: rgba(0, 20, 45, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 700;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.dcd-panel .glass-badge {
+    font-size: 1rem;
+}
+
+.dcd-panel .glass-badge-count {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 100px; /* makes count look like a pill */
+}
+
+@media (max-width: 1050px) {
+    .dcd-panel .glass-badge {
+        font-size: 0.9rem;
+    }
+}
+
+.dcd-panel .college-card-icon {
     display: none;
 }
 
-/* College Selector Card */
+/* College Selector Card (Dropdown Menu Items) */
 .college-card {
-    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 0;
-    width: 175px;
-    background: var(--surface);
+    background: #fff;
     border: 1.5px solid var(--border);
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -319,56 +507,52 @@ body {
         box-shadow 0.25s var(--ease-out),
         border-color 0.25s var(--ease-out),
         background 0.25s var(--ease-out);
-    box-shadow: var(--shadow-card);
+    box-shadow: var(--shadow-sm);
     font-family: inherit;
     text-align: left;
+    outline: none;
+    padding: 0;
 }
 .college-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
     border-color: rgba(0, 33, 71, 0.2);
 }
 .college-card.active {
     border-color: var(--navy);
-    background: rgba(0, 33, 71, 0.04);
+    background: rgba(0, 33, 71, 0.03);
     box-shadow:
-        0 0 0 3px rgba(0, 33, 71, 0.1),
-        var(--shadow-card);
-}
-.college-card:focus-visible {
-    outline: 2px solid var(--orange);
-    outline-offset: 2px;
+        0 0 0 2px rgba(0, 33, 71, 0.1),
+        var(--shadow-sm);
 }
 
-/* Thumbnail strip at top of college card */
-.college-card-thumb {
-    width: 100%;
-    height: 72px;
-    object-fit: cover;
-    display: block;
-    background: var(--surface-2);
-    flex-shrink: 0;
-    transition: transform 0.4s var(--ease-out);
-}
-.college-card:hover .college-card-thumb {
-    transform: scale(1.06);
-}
 .college-card-thumb-wrap {
     width: 100%;
     height: 72px;
     overflow: hidden;
     flex-shrink: 0;
 }
+.college-card-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    background: var(--surface-2);
+    transition: transform 0.4s var(--ease-out);
+}
+.college-card:hover .college-card-thumb {
+    transform: scale(1.06);
+}
 
 .college-card-body {
-    padding: 11px 14px 13px;
+    padding: 12px;
     width: 100%;
 }
 .college-card-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 7px;
+    margin-bottom: 6px;
     color: var(--text-muted);
     transition:
         color 0.22s var(--ease-out),
@@ -386,8 +570,9 @@ body {
     font-weight: 700;
     color: var(--text);
     line-height: 1.3;
-    margin-bottom: 6px;
+    margin-bottom: 2px;
     display: -webkit-box;
+    line-clamp: 2;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -412,6 +597,24 @@ body {
     color: #fff;
     border-color: var(--navy);
 }
+
+.desktop-action-bottom {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    flex: 1;
+}
+#programme-count {
+    margin-left: auto;
+}
+
+/* Utilities */
+.mobile-only {
+    display: none !important;
+}
+
+/* Mobile tweaks for header */
 
 /* ═══════════════════════════════════════════════════
    MOBILE: Trigger & Bottom Sheet (Hidden on Desktop)
@@ -592,6 +795,7 @@ body {
     line-height: 1.4;
     margin-bottom: 10px;
     display: -webkit-box;
+    line-clamp: 3;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
@@ -817,10 +1021,11 @@ body {
     } /* nav-row stays hidden on mobile too; mobile uses dots */
 
     .programmes-section {
-        height: 100vh;
-        max-height: 100vh;
-        overflow: hidden;
+        height: auto; /* Shrink to fit the natural card footprint instead of forcing 68vh */
+        max-height: 75vh; /* Slightly relaxed securely */
+        overflow: visible; /* Prevent cutting off bottom shadows */
         min-height: unset;
+        padding-bottom: 2rem; /* Give dot-nav at the bottom a bit of breathing room */
     }
     .glass-shell {
         padding: 1rem 4% 0.5rem;
@@ -934,20 +1139,40 @@ body {
     .card-track {
         display: flex;
         gap: 12px;
-        height: 100%;
+        height: auto; /* Let track wrap to items natively */
+        align-items: stretch; /* Enforce uniform heights across the entire row */
         transition: none !important;
         transform: none !important;
     }
     .programme-card {
         flex: 0 0 88%;
-        height: 100%;
+        height: auto; /* Allow the card to stretch fully matching the track limit */
         scroll-snap-align: center;
     }
     .card-image-wrap {
-        height: 48%;
+        height: auto; 
+        aspect-ratio: 1 / 1; /* Square images precisely as requested */
+        width: 100%;
     }
     .card-text-wrap {
-        padding: 14px 14px 16px;
+        padding: 10px 14px 12px;
+        flex: 1; /* Expand container to fill stretched card */
+        justify-content: flex-start;
+    }
+
+    /* Safely compressing text margins exclusively for mobile */
+    .meta-tags {
+        margin-bottom: 6px !important;
+    }
+    .card-title {
+        margin-bottom: 8px !important;
+        line-height: 1.25 !important;
+        flex: none !important; /* Stop taking up excess space */
+    }
+    .card-footer {
+        flex: 1 !important; /* Absorb remaining empty card height */
+        padding-top: 8px !important;
+        margin-top: 0 !important; /* Keeps divider anchored tight to title */
     }
 
     /* Swipe Cue */
@@ -1044,7 +1269,9 @@ body {
         align-items: center;
         cursor: pointer;
         color: var(--text-muted);
-        transition: background 0.2s ease, color 0.2s ease;
+        transition:
+            background 0.2s ease,
+            color 0.2s ease;
         border-radius: 24px 24px 0 0;
     }
     .mcd-panel-handle-area:hover,
