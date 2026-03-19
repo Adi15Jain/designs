@@ -89,7 +89,7 @@ let activeCategoryId = "all"; // "all" = All Colleges
 let activeFilter = "All";
 let searchQuery = "";
 let visibleCount = 12; // Desktop Load More page size
-const PAGE_SIZE = 999;
+const PAGE_SIZE = 12;
 
 let currentIndex = 0;
 let currentPrograms = []; // Mobile carousel programs
@@ -271,7 +271,7 @@ function buildDesktopDropdownItem({ id, name, image, icon, count }) {
 
 function initDesktopDropdownBehavior() {
     if (!desktopDropdownTrigger || !desktopDropdown) return;
-    
+
     const desktopBackdrop = document.getElementById("dcd-backdrop");
 
     if (desktopBackdrop) {
@@ -591,7 +591,6 @@ function buildProgrammeCard(prog, animIdx) {
         <div class="card-text-wrap">
             <div class="meta-tags">
                 <span class="meta-tag">${duration}</span>
-                <span class="meta-tag">Full Time</span>
             </div>
             <h3 class="card-title">${prog.title}</h3>
             <div class="card-footer">
@@ -665,7 +664,6 @@ function renderMobileCards() {
             <div class="card-text-wrap">
                 <div class="meta-tags">
                     <span class="meta-tag">${duration}</span>
-                    <span class="meta-tag">Full Time</span>
                 </div>
                 <h3 class="card-title">${prog.title}</h3>
                 <div class="card-footer">
@@ -930,26 +928,30 @@ function initMobileSheetBehavior() {
     const closeBtn = document.getElementById("mcd-close-btn");
     if (closeBtn) {
         closeBtn.addEventListener("click", closeMobileSheet);
-        
+
         let startY = 0;
         let currentY = 0;
         let isDragging = false;
-        
-        closeBtn.addEventListener("touchstart", (e) => {
-            startY = e.touches[0].clientY;
-            isDragging = true;
-            if (mcdPanel) mcdPanel.classList.add("dragging");
-        }, { passive: true });
-        
+
+        closeBtn.addEventListener(
+            "touchstart",
+            (e) => {
+                startY = e.touches[0].clientY;
+                isDragging = true;
+                if (mcdPanel) mcdPanel.classList.add("dragging");
+            },
+            { passive: true },
+        );
+
         closeBtn.addEventListener("touchmove", (e) => {
             if (!isDragging || !mcdPanel) return;
             currentY = e.touches[0].clientY;
             let diff = currentY - startY;
-            if (diff > 0) { 
+            if (diff > 0) {
                 mcdPanel.style.transform = `translateY(${diff}px)`;
             }
         });
-        
+
         closeBtn.addEventListener("touchend", () => {
             if (!isDragging) return;
             isDragging = false;
